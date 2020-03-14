@@ -1,67 +1,58 @@
-<template>
-	<div class="search_page">
-    <div v-if="movies.results.length">
-      <movie-list 
-        :lista="movies"
-      />
-      
-      <v-pagination
+<template lang="pug">
+  .search_page
+    div(v-if="movies.results.length")
+      movie-list(:lista="movies")
+      v-pagination(
         v-model="page"
         class="my-4"
         :length="movies.total_pages"
         :total-visible="7"
-        @input="nextPage()"
-      ></v-pagination>
-    </div>
-
-    <!--Se não tiver nenhum resultado-->
-    <div class="text-center mt-4">
-      <h1>Nenhum filme encontrado!</h1>
-    </div>
-	</div>
+        @input="nextPage()")
+    <!-- Se não tiver nenhum resultado-->
+    div(class="text-center mt-4")
+      h1 Nenhum filme encontrado!
 </template>
 
 <script>
-import MovieAPI from '../services/MovieAPI.js'
-import MovieList from '../components/MovieList.vue'
+import MovieAPI from "../services/MovieAPI.js";
+import MovieList from "../components/MovieList.vue";
 
 export default {
   components: {
     MovieList
   },
 
-	data: () => ({
+  data: () => ({
     page: 1,
-		movies: []
-	}),
+    movies: []
+  }),
 
   watch: {
-    '$route.query.q': function() {
-      this.nextPage()
+    "$route.query.q": function() {
+      this.nextPage();
     }
   },
 
-	mounted() {
-		this.nextPage()
+  mounted() {
+    this.nextPage();
   },
 
-	methods: {
+  methods: {
     nextPage: function() {
-      MovieAPI.searchMovies(this.$route.query.q, this.page)      
-        .then(response => {
-          this.movies = response
-        })
+      MovieAPI.searchMovies(this.$route.query.q, this.page).then(response => {
+        this.movies = response;
+      });
     }
-	}
-}
+  }
+};
 </script>
 
 <style scoped>
-  .titulo {
-    display: inline-block;
-    word-break: break-word;
-    font-weight: 500;
-    font-size: 13px;
-    line-height: 120%;
-  }
+.titulo {
+  display: inline-block;
+  word-break: break-word;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 120%;
+}
 </style>
